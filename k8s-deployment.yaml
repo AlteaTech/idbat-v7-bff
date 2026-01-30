@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: idbat-v7-bff
+  labels:
+    app: idbat-v7-bff
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: idbat-v7-bff
+  template:
+    metadata:
+      labels:
+        app: idbat-v7-bff
+    spec:
+      containers:
+        - name: idbat-v7-bff
+          image: <YOUR_ECR_REPO_URI>:latest # A remplacer par votre URI ECR
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: idbat-v7-bff
+spec:
+  type: ClusterIP
+  selector:
+    app: idbat-v7-bff
+  ports:
+    - port: 80
+      targetPort: 8080
