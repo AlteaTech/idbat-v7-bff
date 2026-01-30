@@ -24,6 +24,9 @@ dependencies {
     // Gateway
     implementation("org.springframework.cloud:spring-cloud-starter-gateway")
     
+    // Swagger / OpenAPI Aggregation
+    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.3.0")
+    
     // Kotlin support
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")

@@ -10,15 +10,22 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: default_route
+        - id: backend_route
           uri: http://localhost:8081
           predicates:
             - Path=/front/**
           filters:
-            - RewritePath=/front/(?<segment>.*), /$\{segment}
+            - StripPrefix=1
       # Configuration pour K8s (readiness/liveness probes)
   main:
     cloud-platform: kubernetes
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: Backend API
+        url: /front/v3/api-docs
+    path: /swagger-ui.html
 
 management:
   endpoint:
