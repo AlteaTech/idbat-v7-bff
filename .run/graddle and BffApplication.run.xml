@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="graddle and BffApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="ALTERNATIVE_JRE_PATH" value="21" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <module name="idbat-v7-bff.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.idbat.bff.BffApplication" />
+    <method v="2">
+      <option name="Gradle.BeforeRunTask" enabled="true" tasks="clean build -x test" externalProjectPath="$PROJECT_DIR$" vmOptions="" scriptParameters="" />
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
