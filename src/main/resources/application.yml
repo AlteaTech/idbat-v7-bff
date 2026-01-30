@@ -19,7 +19,6 @@ spring:
             - StripPrefix=1
             - AddRequestHeader=X-Forwarded-Proto, http
             - AddRequestHeader=X-Forwarded-Host, localhost:8082
-      # Configuration pour K8s (readiness/liveness probes)
   main:
     cloud-platform: kubernetes
 
