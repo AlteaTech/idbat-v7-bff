@@ -1,6 +1,7 @@
 server:
   port: 8082
   shutdown: graceful
+  forward-headers-strategy: framework
 
 spring:
   application:
@@ -16,12 +17,17 @@ spring:
             - Path=/front/**
           filters:
             - StripPrefix=1
+            - AddRequestHeader=X-Forwarded-Proto, http
+            - AddRequestHeader=X-Forwarded-Host, localhost:8082
       # Configuration pour K8s (readiness/liveness probes)
   main:
     cloud-platform: kubernetes
 
 springdoc:
+  api-docs:
+    enabled: true
   swagger-ui:
+    enabled: true
     urls:
       - name: Backend API
         url: /front/v3/api-docs
