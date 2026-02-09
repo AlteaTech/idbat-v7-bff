@@ -1,7 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="graddle and BffApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <option name="ALTERNATIVE_JRE_PATH" value="21" />
-    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <option name="ALTERNATIVE_JRE_PATH" value="$USER_HOME$/.jdks/ms-21.0.9" />
     <module name="idbat-v7-bff.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.idbat.bff.BffApplication" />
     <method v="2">

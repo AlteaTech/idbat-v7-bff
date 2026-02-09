@@ -1,5 +1,5 @@
 server:
-  port: 8082
+  port: ${K8S_PORT:8082}
   shutdown: graceful
   forward-headers-strategy: framework
 
@@ -12,7 +12,7 @@ spring:
     gateway:
       routes:
         - id: backend_route
-          uri: http://localhost:8081
+          uri: ${BACKEND_URI:http://localhost:8081}
           predicates:
             - Path=/front/**
           filters:
