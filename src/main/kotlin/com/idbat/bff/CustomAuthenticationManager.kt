@@ -27,7 +27,6 @@ class CustomAuthenticationManager(
             .bodyToMono(ValidationResponse::class.java)
             .flatMap { response ->
                 if (response.valid) {
-                    // Créer une authentification valide
                     val authorities = listOf(SimpleGrantedAuthority("ROLE_USER"))
                     val auth: Authentication = UsernamePasswordAuthenticationToken(response.username, token, authorities)
                     Mono.just(auth)

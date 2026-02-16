@@ -32,9 +32,6 @@ class SecurityConfig(
             }
             .oauth2ResourceServer { oauth2 ->
                 // On utilise notre CustomAuthenticationManager au lieu du JwtDecoder standard
-                // oauth2.authenticationManager(customAuthenticationManager) // Cette méthode n'existe pas directement sur le DSL oauth2ResourceServer
-                
-                // La bonne façon de faire est de configurer le JWT spec avec notre authenticationManager
                 oauth2.jwt { jwt ->
                     jwt.authenticationManager(customAuthenticationManager)
                 }

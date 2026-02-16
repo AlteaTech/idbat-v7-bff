@@ -25,7 +25,6 @@ dependencies {
     // Gateway
     implementation("org.springframework.cloud:spring-cloud-starter-gateway")
     
-    // Security (OAuth2 Resource Server)
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 
