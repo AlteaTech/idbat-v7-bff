@@ -1,5 +1,5 @@
 server:
-  port: ${K8S_PORT:8082}
+  port: ${K8S_PORT:8084}
   shutdown: graceful
   forward-headers-strategy: framework
 
@@ -17,8 +17,8 @@ spring:
             - Path=/front/**
           filters:
             - StripPrefix=1
-            - AddRequestHeader=X-Forwarded-Proto, http
-            - AddRequestHeader=X-Forwarded-Host, localhost:8082
+            - AddRequestHeader=X-Forwarded-Proto, ${BASE_PROTOCOL:http}
+            - AddRequestHeader=X-Forwarded-Host, ${BASE_URI:idbat-rec-back-bff.rcextranet.rcveolia-es.net}
   main:
     cloud-platform: kubernetes
 
