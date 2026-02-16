@@ -3,6 +3,10 @@ server:
   shutdown: graceful
   forward-headers-strategy: framework
 
+app:
+  auth:
+    validate-url: ${VALIDATE_TOKEN_URI:http://localhost:8083/api/auth/validate}
+
 spring:
   application:
     name: idbat-v7-bff
@@ -21,14 +25,6 @@ spring:
             - AddRequestHeader=X-Forwarded-Host, ${BASE_URI:idbat-rec-back-bff.rcextranet.rcveolia-es.net}
   main:
     cloud-platform: kubernetes
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          # Remplacez par l'URL de votre Issuer (ex: Keycloak, Auth0, Cognito)
-          issuer-uri: ${ISSUER_URI:https://your-idp-domain.com/realms/your-realm}
-          # Ou jwk-set-uri si l'issuer-uri n'est pas dispo publiquement
-          # jwk-set-uri: https://your-idp-domain.com/.well-known/jwks.json
 
 springdoc:
   api-docs:
