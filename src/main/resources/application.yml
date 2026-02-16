@@ -3,6 +3,10 @@ server:
   shutdown: graceful
   forward-headers-strategy: framework
 
+app:
+  auth:
+    validate-url: ${VALIDATE_TOKEN_URI:http://localhost:8083/api/auth/validate}
+
 spring:
   application:
     name: idbat-v7-bff

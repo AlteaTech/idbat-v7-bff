@@ -25,6 +25,9 @@ dependencies {
     // Gateway
     implementation("org.springframework.cloud:spring-cloud-starter-gateway")
     
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+
     // Swagger / OpenAPI Aggregation
     implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.3.0")
     
@@ -38,6 +41,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.security:spring-security-test")
 }
 
 dependencyManagement {
