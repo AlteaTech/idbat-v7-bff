@@ -1,7 +1,16 @@
 server:
-  port: ${K8S_PORT:8084}
+  port: ${K8S_PORT:8081}
   shutdown: graceful
   forward-headers-strategy: framework
+  netty:
+    connection-timeout: 5000
+  max-http-request-header-size: 16KB
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty: DEBUG
+    org.springframework.web: DEBUG
 
 spring:
   application:
@@ -10,6 +19,18 @@ spring:
     timeout-per-shutdown-phase: "5s"
   cloud:
     gateway:
+      httpclient:
+        max-header-size: 16384 # 16KB
+        connect-timeout: 5000
+        response-timeout: 10s
+        ssl:
+          useInsecureTrustManager: true
+      x-forwarded:
+        enabled: false
+        prefix-enabled: true
+        proto-enabled: true
+        port-enabled: true
+        host-enabled: true
       routes:
         - id: backend_route
           uri: ${BACKEND_URI:http://localhost:8081}
@@ -17,10 +38,12 @@ spring:
             - Path=/front/**
           filters:
             - StripPrefix=1
-            - AddRequestHeader=X-Forwarded-Proto, ${BASE_PROTOCOL:http}
-            - AddRequestHeader=X-Forwarded-Host, ${BASE_URI:idbat-rec-back-bff.rcextranet.rcveolia-es.net}
+            - RemoveRequestHeader=Forwarded
+            - RemoveRequestHeader=X-Forwarded-For
+
   main:
     cloud-platform: kubernetes
+
 
 springdoc:
   api-docs:
