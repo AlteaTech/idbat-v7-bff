@@ -12,10 +12,6 @@ logging:
     reactor.netty: DEBUG
     org.springframework.web: DEBUG
 
-app:
-  auth:
-    validate-url: ${VALIDATE_TOKEN_URI:http://localhost:8083/api/auth/validate}
-
 spring:
   application:
     name: idbat-v7-bff
@@ -23,18 +19,26 @@ spring:
     timeout-per-shutdown-phase: "5s"
   cloud:
     gateway:
+      # Configuration CORS globale pour le BFF
+      # C'est le BFF qui répond au navigateur pour les requêtes OPTIONS
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+              - PATCH
+            allowedHeaders: "*"
       httpclient:
         max-header-size: 16384 # 16KB
         connect-timeout: 5000
         response-timeout: 10s
         ssl:
           useInsecureTrustManager: true
-      x-forwarded:
-        enabled: false
-        prefix-enabled: true
-        proto-enabled: true
-        port-enabled: true
-        host-enabled: true
       routes:
         - id: backend_route
           uri: ${BACKEND_URI:http://localhost:8081}
@@ -42,12 +46,16 @@ spring:
             - Path=/front/**
           filters:
             - StripPrefix=1
+            # On ajoute le préfixe pour que le backend sache (s'il est configuré pour)
+            - AddRequestHeader=X-Forwarded-Prefix, /front
+            # On supprime le header Forwarded qui faisait planter le backend (IP mal formée)
             - RemoveRequestHeader=Forwarded
             - RemoveRequestHeader=X-Forwarded-For
-
+            # On déduplique les headers CORS pour éviter que le navigateur ne reçoive ceux du BFF + ceux du Backend
+            # RETAIN_FIRST : On garde ceux du BFF (qui sont permissifs)
+            - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_FIRST
   main:
     cloud-platform: kubernetes
-
 
 springdoc:
   api-docs:
