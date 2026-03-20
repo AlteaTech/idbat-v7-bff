@@ -15,9 +15,9 @@ variables:
 
   # Configuration Base de données - REC
   BACKEND_URI_REC: "http://idbatv7back:80"
-  BASE_PROTOCOL: "http"
-  BASE_URI: "idbat-rec-back-bff.rcextranet.rcveolia-es.net"
-  VALIDATE_TOKEN_URI: "https://idbat-rec-bff.recyclage.veolia.fr/front/api/auth/validate"
+  BASE_PROTOCOL: "https"
+  BASE_URI: "idbat-rec-bff.recyclage.veolia.fr"
+  VALIDATE_TOKEN_URI: "http://idbatv7back:80/api/auth/validate"
 
   # AWS CloudWatch Configuration
   AWS_REGION: "eu-west-3"
