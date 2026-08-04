@@ -111,7 +111,7 @@ k8s-deploy-dev:
     - kubectl version --client
   script:
     - kubectl delete pod $K8S_POD_NAME -n $K8S_NAMESPACE_DEV --ignore-not-found=true
-    - kubectl run $K8S_POD_NAME --image=$IMAGE_TAG_UNIQUE -n $K8S_NAMESPACE_DEV --labels=$K8S_LABELS --port=$K8S_PORT --env="K8S_PORT=$K8S_PORT" --env="VALIDATE_TOKEN_URI=$VALIDATE_TOKEN_URI" --env="BACKEND_URI=$BACKEND_URI_DEV" --env="AWS_REGION=$AWS_REGION" --env="CLOUDWATCH_LOG_GROUP=$CLOUDWATCH_LOG_GROUP" --env="AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" --env="AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" --dry-run=client -o yaml > /tmp/deploy.yaml
+    - kubectl run $K8S_POD_NAME --image=$IMAGE_TAG_UNIQUE -n $K8S_NAMESPACE_DEV --labels=$K8S_LABELS --port=$K8S_PORT --env="K8S_PORT=$K8S_PORT" --env="VALIDATE_TOKEN_URI=$VALIDATE_TOKEN_URI" --env="BACKEND_URI=$BACKEND_URI_DEV" --env="AWS_REGION=$AWS_REGION" --env="CLOUDWATCH_LOG_GROUP=$CLOUDWATCH_LOG_GROUP" --env="AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" --env="AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" --overrides='{"apiVersion":"v1","spec":{"securityContext":{"runAsNonRoot":true,"runAsUser":1001,"runAsGroup":1001}}}' --dry-run=client -o yaml > /tmp/deploy.yaml
     - kubectl set resources --local -f /tmp/deploy.yaml --requests="memory=$K8S_MEMORY_REQUEST,cpu=$K8S_CPU_REQUEST" --limits="memory=$K8S_MEMORY_LIMIT,cpu=$K8S_CPU_LIMIT" -o yaml > /tmp/deployment.yaml
     - kubectl apply -f /tmp/deployment.yaml 
     - kubectl wait --for=condition=Ready pod/$K8S_POD_NAME -n $K8S_NAMESPACE_DEV --timeout=300s
@@ -165,7 +165,7 @@ k8s-deploy-rec:
     - kubectl version --client
   script:
     - kubectl delete pod $K8S_POD_NAME -n $K8S_NAMESPACE_REC --ignore-not-found=true
-    - kubectl run $K8S_POD_NAME --image=$IMAGE_TAG_UNIQUE -n $K8S_NAMESPACE_REC --labels=$K8S_LABELS --port=$K8S_PORT --env="BACKEND_URI=$BACKEND_URI_REC" --env="VALIDATE_TOKEN_URI=$VALIDATE_TOKEN_URI" --env="BASE_PROTOCOL=$BASE_PROTOCOL" --env="BASE_URI=$BASE_URI" --env="AWS_REGION=$AWS_REGION" --env="CLOUDWATCH_LOG_GROUP=$CLOUDWATCH_LOG_GROUP" --env="AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" --env="AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" --dry-run=client -o yaml > /tmp/deploy.yaml
+    - kubectl run $K8S_POD_NAME --image=$IMAGE_TAG_UNIQUE -n $K8S_NAMESPACE_REC --labels=$K8S_LABELS --port=$K8S_PORT --env="BACKEND_URI=$BACKEND_URI_REC" --env="VALIDATE_TOKEN_URI=$VALIDATE_TOKEN_URI" --env="BASE_PROTOCOL=$BASE_PROTOCOL" --env="BASE_URI=$BASE_URI" --env="AWS_REGION=$AWS_REGION" --env="CLOUDWATCH_LOG_GROUP=$CLOUDWATCH_LOG_GROUP" --env="AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" --env="AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" --overrides='{"apiVersion":"v1","spec":{"securityContext":{"runAsNonRoot":true,"runAsUser":1001,"runAsGroup":1001}}}' --dry-run=client -o yaml > /tmp/deploy.yaml
     - kubectl set resources --local -f /tmp/deploy.yaml --requests="memory=$K8S_MEMORY_REQUEST,cpu=$K8S_CPU_REQUEST" --limits="memory=$K8S_MEMORY_LIMIT,cpu=$K8S_CPU_LIMIT" -o yaml > /tmp/deployment.yaml
     - kubectl apply -f /tmp/deployment.yaml 
     - kubectl wait --for=condition=Ready pod/$K8S_POD_NAME -n $K8S_NAMESPACE_REC --timeout=300s
