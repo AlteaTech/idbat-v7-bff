@@ -21,6 +21,20 @@ repositories {
 
 extra["springCloudVersion"] = "2023.0.6"
 
+// Surcharge la version log4j geree par Spring Boot 3.3.8 (2.23.1), vulnerable a
+// l'encodage JSON des flottants non finis dans MapMessage.asJson()
+// (suite incomplete de CVE-2026-34481). Non atteignable ici (pas de log4j-core
+// ni de JsonTemplateLayout), corrige pour la conformite SCA.
+extra["log4j2.version"] = "2.26.1"
+
+// Monte Spring Framework 6.1.16 -> 6.1.21 (spring-web et spring-webflux inclus).
+// Les modules spring-core / -web / -webflux / -context partagent la meme version :
+// surcharger un seul de ces jars provoquerait des NoSuchMethodError au runtime.
+// 6.1.21 est le correctif de la branche 6.1.x, celle contre laquelle Boot 3.3.8 est
+// construit : on reste dans la matrice de compatibilite officielle (a la difference
+// de 6.2.19, correctif de l'autre branche).
+extra["spring-framework.version"] = "6.1.21"
+
 dependencies {
     // Gateway
     implementation("org.springframework.cloud:spring-cloud-starter-gateway")

@@ -23,6 +23,13 @@ RUN ./gradlew bootJar --no-daemon -x test
 # 2. Étape d'exécution : JRE seul, exécuté par un utilisateur non privilégié
 FROM eclipse-temurin:21-jre-alpine
 
+# CVE OpenSSL "QUIC listener" (CWE-770, allocation non bornee de canaux en attente
+# d'accept) : force libssl/libcrypto a la version corrigee de la branche Alpine 3.24,
+# sans dependre de ce qui est fige dans l'image de base. Non atteignable ici (aucun
+# listener QUIC, la JVM fait son TLS via JSSE et non OpenSSL) ; applique pour la
+# conformite SCA. NB : le pin exact casse le build quand Alpine publiera un -r1.
+RUN apk add --no-cache --upgrade "libcrypto3=3.5.8-r0" "libssl3=3.5.8-r0"
+
 # Image Alpine -> outils busybox (addgroup / adduser)
 # -S : compte/groupe "système" (pas de mot de passe, pas d'expiration)
 # -D : pas de mot de passe, -H : pas de création de home
