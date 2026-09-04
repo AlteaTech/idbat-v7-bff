@@ -19,7 +19,7 @@ repositories {
     mavenCentral()
 }
 
-extra["springCloudVersion"] = "2023.0.5"
+extra["springCloudVersion"] = "2023.0.6"
 
 dependencies {
     // Gateway
