@@ -1,7 +1,7 @@
 plugins {
     kotlin("jvm") version "1.9.25"
     kotlin("plugin.spring") version "1.9.25"
-    id("org.springframework.boot") version "3.3.8"
+    id("org.springframework.boot") version "3.5.16"
     id("io.spring.dependency-management") version "1.1.7"
     kotlin("plugin.jpa") version "1.9.25"
 }
@@ -19,21 +19,18 @@ repositories {
     mavenCentral()
 }
 
-extra["springCloudVersion"] = "2023.0.6"
+// Boot 3.5.16 + Cloud 2025.0.3 fournissent nativement spring-security 6.5.11,
+// spring-framework 6.2.19 et spring-cloud-gateway 4.3.5. Cette combinaison couvre
+// l'exigence spring-security-web >= 6.5.9 et ferme CVE-2026-47825, qui n'avait
+// aucun correctif OSS sur la branche gateway 4.1.x. Aucune surcharge de version
+// n'est donc necessaire pour ces trois composants.
+extra["springCloudVersion"] = "2025.0.3"
 
-// Surcharge la version log4j geree par Spring Boot 3.3.8 (2.23.1), vulnerable a
-// l'encodage JSON des flottants non finis dans MapMessage.asJson()
-// (suite incomplete de CVE-2026-34481). Non atteignable ici (pas de log4j-core
-// ni de JsonTemplateLayout), corrige pour la conformite SCA.
+// Seule surcharge restante : Boot 3.5.16 gere log4j 2.24.3, encore vulnerable a
+// l'encodage JSON des flottants non finis dans MapMessage.asJson() (suite
+// incomplete de CVE-2026-34481). Non atteignable ici (pas de log4j-core ni de
+// JsonTemplateLayout), monte pour la conformite SCA.
 extra["log4j2.version"] = "2.26.1"
-
-// Monte Spring Framework 6.1.16 -> 6.1.21 (spring-web et spring-webflux inclus).
-// Les modules spring-core / -web / -webflux / -context partagent la meme version :
-// surcharger un seul de ces jars provoquerait des NoSuchMethodError au runtime.
-// 6.1.21 est le correctif de la branche 6.1.x, celle contre laquelle Boot 3.3.8 est
-// construit : on reste dans la matrice de compatibilite officielle (a la difference
-// de 6.2.19, correctif de l'autre branche).
-extra["spring-framework.version"] = "6.1.21"
 
 dependencies {
     // Gateway
@@ -43,7 +40,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 
     // Swagger / OpenAPI Aggregation
-    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.3.0")
+    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.8.17")
     
     // Kotlin support
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
