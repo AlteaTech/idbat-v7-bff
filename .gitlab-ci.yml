@@ -73,7 +73,7 @@ docker-build-dev:
   variables:
     IMAGE_TAG_UNIQUE: "$IMAGE_BASE_NAME:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA"
   script:
-    - docker build -t "$IMAGE_TAG_UNIQUE" .
+    - docker build --pull --no-cache -t "$IMAGE_TAG_UNIQUE" .
   needs:
     - gradle-build
 
@@ -129,7 +129,7 @@ docker-build-rec:
   variables:
     IMAGE_TAG_UNIQUE: "$IMAGE_BASE_NAME:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA"
   script:
-    - docker build -t "$IMAGE_TAG_UNIQUE" .
+    - docker build --pull --no-cache -t "$IMAGE_TAG_UNIQUE" .
   needs:
     - gradle-build
 
