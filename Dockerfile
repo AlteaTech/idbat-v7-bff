@@ -23,9 +23,23 @@ RUN ./gradlew bootJar --no-daemon -x test
 # 2. Étape d'exécution : JRE seul, exécuté par un utilisateur non privilégié
 FROM eclipse-temurin:21-jre-alpine
 
-# Mise a jour des paquets systeme pour couvrir les CVE OpenSSL eventuels.
-# On n'epingle pas de version exacte pour eviter les cassures lors des releases Alpine.
-RUN apk upgrade --no-cache
+# Durcissement des paquets systeme (CVE remontees par NeuVector) :
+# 1. apk upgrade --available : monte tous les paquets a la derniere version publiee
+#    (openssl/libcrypto3/libssl3 - CMS AuthEnvelopedData, et correctifs eventuels des autres libs).
+#    On n'epingle pas de version exacte pour eviter les cassures lors des releases Alpine.
+# 2. Suppression des bibliotheques natives inutiles pour un BFF Spring Boot headless,
+#    ainsi que de leurs dependants de premier niveau (-r) :
+#      - gnutls       (DTLS merge_handshake_packet heap overflow) : tire par gnupg, inutile au runtime
+#      - libpng       (use-after-free png_set_tRNS / png_set_PLTE, < 1.6.56) : tire par freetype/fontconfig
+#      - brotli-libs  (buffer overflow decode.c, 1.0.3 -> 1.2.0) : tire par freetype
+#      - libexpat     (heap over-read XML_ParseBuffer) : tire par fontconfig
+#    La JRE Temurin est livree en tarball (pas en paquet apk) : elle n'est pas supprimee,
+#    et l'application tourne en mode headless (pas de rendu de polices AWT).
+# 3. Affiche les versions OpenSSL finales dans les logs de build pour tracabilite.
+RUN apk upgrade --no-cache --available \
+    && TO_REMOVE="$(apk info -e gnutls libpng brotli-libs libexpat | tr '\n' ' ')" \
+    && if [ -n "$TO_REMOVE" ]; then apk del --no-cache -r $TO_REMOVE; fi \
+    && apk info -v libcrypto3 libssl3
 
 # Image Alpine -> outils busybox (addgroup / adduser)
 # -S : compte/groupe "système" (pas de mot de passe, pas d'expiration)
