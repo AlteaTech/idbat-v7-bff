@@ -73,11 +73,13 @@ spring:
   main:
     cloud-platform: kubernetes
 
+# Swagger / OpenAPI desactive par defaut : a activer explicitement via SWAGGER_ENABLED=true
+# (OVH, docker local). Quand false, /swagger-ui.html et /v3/api-docs repondent 404.
 springdoc:
   api-docs:
-    enabled: true
+    enabled: ${SWAGGER_ENABLED:false}
   swagger-ui:
-    enabled: true
+    enabled: ${SWAGGER_ENABLED:false}
     urls:
       - name: Backend API
         url: /front/v3/api-docs

@@ -32,6 +32,16 @@ extra["springCloudVersion"] = "2025.0.3"
 // JsonTemplateLayout), monte pour la conformite SCA.
 extra["log4j2.version"] = "2.26.1"
 
+// Surcharges SCA (scan NeuVector) : Boot 3.5.16 est la derniere 3.5.x et embarque
+// encore des versions vulnerables. On reste sur les memes lignes mineures :
+//  - Netty 4.1.135 -> 4.1.139 : netty-handler (Critical, corrige en 4.1.137),
+//    netty-codec / codec-http / codec-http2 / codec-dns (corriges en 4.1.136/137)
+//  - Jackson 2.21.4 -> 2.21.8 : jackson-core / jackson-databind (corriges en 2.21.5..2.21.7)
+//  - commons-lang3 3.17.0 -> 3.20.0 : corrige en 3.18.0, 3.20.0 = version demandee par springdoc
+extra["netty.version"] = "4.1.139.Final"
+extra["jackson-bom.version"] = "2.21.8"
+extra["commons-lang3.version"] = "3.20.0"
+
 dependencies {
     // Gateway
     implementation("org.springframework.cloud:spring-cloud-starter-gateway")

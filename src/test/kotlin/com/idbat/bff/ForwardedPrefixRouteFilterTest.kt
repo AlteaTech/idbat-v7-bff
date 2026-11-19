@@ -10,7 +10,10 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import reactor.netty.DisposableServer
 import reactor.netty.http.server.HttpServer
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    properties = ["SWAGGER_ENABLED=true"]
+)
 class ForwardedPrefixRouteFilterTest {
 
     @Autowired
